@@ -1,4 +1,5 @@
-﻿using Application.DataTransferObjects;
+﻿using Application.DataTransferObjects.Activity;
+
 //using Application.Mediator;
 using Domain.Entities;
 using Domain.IRepositories;

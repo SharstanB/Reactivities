@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Validators;
+using Domain.Entities;
 using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -28,11 +29,18 @@ namespace Application.Repositories
 
             return categories;
         }
+     
+
         public async Task<Category?> GetById(Guid id, CancellationToken cancellationToken)
         {
             var category = await appDBContext.Categories.FirstOrDefaultAsync(act => act.Id == id);
 
             return category;
+        }
+
+        public ValidationResult<Task<Category?>> GetByIdTest(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

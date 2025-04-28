@@ -1,7 +1,7 @@
 ﻿using Domain.IRepositories;
 using Domain.Entities;
-using Application.DataTransferObjects;
 using Domain.Mediator;
+using Application.DataTransferObjects.Activity;
 namespace Application.Activities.Command
 {
     public class CreateActivity

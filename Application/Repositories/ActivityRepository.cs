@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Validators;
+using Domain.Entities;
 using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -38,18 +39,16 @@ namespace Application.Repositories
             await appDBContext.SaveChangesAsync(cancellationToken);
             return activityToEdit.Id;
         }
-
         public async Task<List<Activity>> GetAll(CancellationToken cancellationToken)
         {
-            var activities = await appDBContext.Activities.Include(a=>a.City).Include(a=>a.Category)
+            var activities = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
                 .Where(activity => !activity.DeletedAt.HasValue)
                 .OrderBy(activity => activity.CreatedAt)
                 .ToListAsync(cancellationToken);
 
-             return activities;
+            return activities;
 
         }
-
         public  async Task<Activity?> GetById(Guid id, CancellationToken cancellationToken)
         {
             var activity = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
@@ -67,6 +66,12 @@ namespace Application.Repositories
             appDBContext.Update(deletedActivity);
             await appDBContext.SaveChangesAsync();
             
+        }
+   
+
+        public ValidationResult<Task<Activity?>> GetByIdTest(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

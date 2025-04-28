@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Validators;
+using Domain.Entities;
 
 
 namespace Domain.IRepositories
@@ -15,6 +16,7 @@ namespace Domain.IRepositories
     {
         Task<List<TEntity>> GetAll(CancellationToken cancellationToken);
         Task<TEntity?> GetById(Guid id, CancellationToken cancellationToken);
+        ValidationResult<Task<TEntity?>> GetByIdTest(Guid id, CancellationToken cancellationToken);
         Task<Guid> Add(TEntity entity, CancellationToken cancellationToken);
         Task<Guid?> Edit(TEntity entity, CancellationToken cancellationToken);
         Task Delete(Guid id, CancellationToken cancellationToken);

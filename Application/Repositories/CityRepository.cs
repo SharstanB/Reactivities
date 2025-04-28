@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Validators;
+using Domain.Entities;
 using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -38,6 +39,10 @@ namespace Application.Repositories
             var city = await appDBContext.Cities.FirstOrDefaultAsync(act => act.Id == id);
 
             return city;
+        }
+        public ValidationResult<Task<City?>> GetByIdTest(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
   

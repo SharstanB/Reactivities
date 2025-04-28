@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DataTransferObjects
+namespace Application.DataTransferObjects.Activity
 {
     public class EditActivityDTO : CreateActivityDTO
     {
