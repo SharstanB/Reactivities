@@ -1,5 +1,6 @@
 ﻿using Application.Validators;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -8,37 +9,50 @@ namespace Application.Repositories
 {
     public class CategoryRepository(AppDBContext appDBContext) : IRepositoty<Category>
     {
-        public Task<Guid> Add(Category entity, CancellationToken cancellationToken)
+        public Task<OperationResult<Guid>> Add(Category entity, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task Delete(Guid id, CancellationToken cancellationToken)
+        public Task<OperationResult<Category>> Delete(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Guid?> Edit(Category entity, CancellationToken cancellationToken)
+        public Task<OperationResult<Guid>> Edit(Category entity, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
-        public async Task<List<Category>> GetAll(CancellationToken cancellationToken)
+
+        public async Task<OperationResult<List<Category>>> GetAll(CancellationToken cancellationToken)
         {
+            var result = new OperationResult<List<Category>>();
             var categories = await appDBContext.Categories.Where(category => !category.DeletedAt.HasValue)
-                .ToListAsync(cancellationToken);
+           .ToListAsync(cancellationToken);
+            if(categories == null) result.StatusCode = Statuses.NotExist;
+            else
+            {
+                result.StatusCode = Statuses.Success;
+                result.Data = categories;
+            }
+            return result;
 
-            return categories;
         }
-     
 
-        public async Task<Category?> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<OperationResult<Category?>> GetById(Guid id, CancellationToken cancellationToken)
         {
+            var result = new OperationResult<Category?>();
             var category = await appDBContext.Categories.FirstOrDefaultAsync(act => act.Id == id);
-
-            return category;
+            if(category == null)  result.StatusCode = Statuses.NotExist;
+            else
+            {
+                result.StatusCode = Statuses.Success;
+                result.Data = category;
+            }
+            return result;
         }
 
-        public ValidationResult<Task<Category?>> GetByIdTest(Guid id, CancellationToken cancellationToken)
+        public Task<OperationResult<Activity>> GetByIdTest(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

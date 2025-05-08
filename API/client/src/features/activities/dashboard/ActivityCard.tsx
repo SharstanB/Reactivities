@@ -15,7 +15,7 @@ type Props = {
 };
 export default function ActivityCard({activity}: Props) {
 
-
+  // console.log(activity);
   return (
     <Card sx={{ borderRadius: 3 }} key={activity.id}>
       <CardContent>

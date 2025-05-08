@@ -3,9 +3,11 @@ using Application.Activities.Queries;
 
 //using Application.Mediator;
 using Application.Repositories;
+using Application.Validators.Activities;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -25,6 +27,7 @@ builder.Services.AddDbContext<AppDBContext>(opt =>
 
 builder.Services.AddScoped<IMediator, Mediator>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 //Register Handlers Automatically
 builder.Services.Scan(scan => scan
     .FromAssemblyOf<GetActivitiesList>()// Scan Application assembly

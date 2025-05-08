@@ -1,28 +1,38 @@
-﻿using Application.Validators;
+﻿using Application.HelperMethods;
+using Application.Validators;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using System.Threading.Tasks;
 
 namespace Application.Repositories
 {
     public class ActivityRepository(AppDBContext appDBContext) : IRepositoty<Activity>
     {
-        public async Task<Guid> Add(Activity activity, CancellationToken cancellationToken)
+        public async Task<OperationResult<Guid>> Add(Activity activity, CancellationToken cancellationToken)
         {
+            var result = new OperationResult<Guid>();
             appDBContext.Activities.Add(activity); // review why to not use AddAsync
-
-            await appDBContext.SaveChangesAsync(cancellationToken);
-
-            return activity.Id;
+            result = await appDBContext.SaveDataChanges(result, cancellationToken);
+            result.Data = activity.Id;
+            return result;
         }
 
 
-        public async Task<Guid?> Edit(Activity activity, CancellationToken cancellationToken)
+        public async Task<OperationResult<Guid>> Edit(Activity activity, CancellationToken cancellationToken)
         {
+            var result = new OperationResult<Guid>();
+
             var activityToEdit = await appDBContext.Activities.FirstOrDefaultAsync(act => act.Id == activity.Id);
 
-            if (activityToEdit == null) return null;
+            if (activityToEdit == null)
+            {
+                result.StatusCode = Statuses.NotExist;
+            }
+            else
+            {
                 activityToEdit.Description = activity.Description;
                 activityToEdit.Date = activity.Date.ToUniversalTime();
                 activityToEdit.Title = activity.Title;
@@ -35,43 +45,68 @@ namespace Application.Repositories
                 activityToEdit.City = activity.City;
                 activityToEdit.CityId = activity.CityId;
                 appDBContext.Activities.Update(activityToEdit);
-
-            await appDBContext.SaveChangesAsync(cancellationToken);
-            return activityToEdit.Id;
+                result = await appDBContext.SaveDataChanges(result, cancellationToken);
+            }
+               
+            return result;
         }
-        public async Task<List<Activity>> GetAll(CancellationToken cancellationToken)
+        public async Task<OperationResult<List<Activity>>> GetAll(CancellationToken cancellationToken)
         {
+            var result = new OperationResult<List<Activity>>();
             var activities = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
                 .Where(activity => !activity.DeletedAt.HasValue)
                 .OrderBy(activity => activity.CreatedAt)
                 .ToListAsync(cancellationToken);
-
-            return activities;
-
+            if (activities == null) result.StatusCode = Statuses.NotExist;
+            else
+            {
+                result.Data = activities;
+                result.StatusCode = Statuses.Success;
+            }
+            return result;
         }
-        public  async Task<Activity?> GetById(Guid id, CancellationToken cancellationToken)
+        public  async Task<OperationResult<Activity>> GetById(Guid id, CancellationToken cancellationToken)
         {
+            var result = new OperationResult<Activity>();
             var activity = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
                 .FirstOrDefaultAsync(act => act.Id == id);
-
-            return activity;
+            if (activity == null) result.StatusCode = Statuses.NotExist;
+            else
+            {
+                result.Data = activity;
+                result.StatusCode = Statuses.Success;
+            }
+            return result;
         }
-
-
-        public async Task Delete(Guid id, CancellationToken cancellationToken)
+        public async Task<OperationResult<Activity>> Delete(Guid id, CancellationToken cancellationToken)
         {
-           var deletedActivity =  await appDBContext.Activities.FirstOrDefaultAsync(act => act.Id == id);
-            if (deletedActivity == null) return;
-            deletedActivity.DeletedAt = DateTime.UtcNow;
-            appDBContext.Update(deletedActivity);
-            await appDBContext.SaveChangesAsync();
-            
+            var result = new OperationResult<Activity>();
+            var activity = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
+                .FirstOrDefaultAsync(act => act.Id == id);
+            if (activity == null) result.StatusCode = Statuses.NotExist;
+            else
+            {
+                activity.DeletedAt = DateTime.UtcNow;
+                appDBContext.Activities.Update(activity);
+                result = await appDBContext.SaveDataChanges(result, cancellationToken);
+            }
+            return result;
         }
    
 
-        public ValidationResult<Task<Activity?>> GetByIdTest(Guid id, CancellationToken cancellationToken)
+        public async Task<OperationResult<Activity>> GetByIdTest(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var result = new OperationResult<Activity>();
+
+            var activity = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
+                .FirstOrDefaultAsync(act => act.Id == id);
+            if(activity == null) result.StatusCode = Statuses.NotExist;
+            else
+            {
+                result.Data = activity;
+                result.StatusCode = Statuses.Success;
+            }
+            return result;
         }
     }
 }

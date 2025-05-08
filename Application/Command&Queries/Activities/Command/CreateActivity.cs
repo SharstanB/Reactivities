@@ -2,20 +2,28 @@
 using Domain.Entities;
 using Domain.Mediator;
 using Application.DataTransferObjects.Activity;
+using Application.Validators;
+using FluentValidation;
 namespace Application.Activities.Command
 {
     public class CreateActivity
     {
-        public class Command : IRequest<string>
+        public class Command : IRequest<OperationResult<Guid>>
         {
            public required  CreateActivityDTO Activity { get; set; }
 
         }
 
-        public class Handler (IRepositoty<Activity> activityRepositoty) : IRequestHandler<Command, string>
+        public class Handler (IRepositoty<Activity> activityRepositoty, IValidator<Command> validator) :
+            IRequestHandler<Command, OperationResult<Guid>>
         {
-            public async Task<string> Handle(Command request, CancellationToken cancellationToken = default)
+            public async Task<OperationResult<Guid>> Handle(Command request, CancellationToken cancellationToken = default)
             {
+                var validationResult = await validator.ValidateAsync(request, cancellationToken);
+                if (!validationResult.IsValid)
+                {
+                    return new OperationResult<Guid>() { Message = validationResult.Errors.Select(a=> a.ErrorMessage.ToString()).ToString() };
+                }
                 var Activity = new Activity()
                 {
                     CityId = request.Activity.CityId,
@@ -27,9 +35,9 @@ namespace Application.Activities.Command
                     Title = request.Activity.Title,
                     Date = request.Activity.Date.ToUniversalTime(),
                 };
-                var newActivityId = await activityRepositoty.Add(Activity, cancellationToken);
+                var result = await activityRepositoty.Add(Activity, cancellationToken);
 
-                return newActivityId.ToString();
+                return result;
             }
 
         }

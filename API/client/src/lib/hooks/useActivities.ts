@@ -3,12 +3,12 @@ import agent from "../api/agent";
 
 export const useActivities = (id? : string) => {
     const queryClient = useQueryClient();
-    const {data: activities, isPending} =  useQuery({
+    const {data: activityResult , isPending} =  useQuery({
         queryKey: ['activities'],
           queryFn: async () => {
-            const response = await agent.get<Activity[]>('/Activities');
-            console.log(response.data);
-          return response.data;
+            const response = await agent.get<ApiResponse<Activity[]>>('/Activities');
+            console.log(response.data.data);
+          return response.data.data;
         },
         staleTime: 1000 * 60 * 5
       });
@@ -54,7 +54,7 @@ export const useActivities = (id? : string) => {
     })
 
       return {
-        activities,
+        activityResult,
         isPending ,
         updateActivity ,
         createActivity,

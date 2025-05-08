@@ -1,4 +1,6 @@
 ﻿using Application.DataTransferObjects.Activity;
+using Application.Validators;
+
 
 //using Application.Mediator;
 using Domain.Entities;
@@ -10,13 +12,13 @@ namespace Application.Activities.Command
 {
     public class EditActivity
     {
-        public class Command : IRequest<string>
+        public class Command : IRequest<OperationResult<Guid>>
         {
             public required EditActivityDTO Activity { get; set; }
         }
-        public class Handler(IRepositoty<Activity> activityRepositoty) : IRequestHandler<Command, string>
+        public class Handler(IRepositoty<Activity> activityRepositoty) : IRequestHandler<Command, OperationResult<Guid>>
         {
-            public async Task<string> Handle(Command command, CancellationToken cancellationToken = default)
+            public async Task<OperationResult<Guid>> Handle(Command command, CancellationToken cancellationToken = default)
             {
                 var Activity = new Activity()
                 {
@@ -30,8 +32,8 @@ namespace Application.Activities.Command
                     Date = command.Activity.Date,
                     Id = command.Activity.Id,
                 };
-                await activityRepositoty.Edit(Activity, cancellationToken);
-                return Activity.Id.ToString();
+                var result =  await activityRepositoty.Edit(Activity, cancellationToken);
+                return result;
             }
         }
     }

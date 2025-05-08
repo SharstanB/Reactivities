@@ -1,49 +1,54 @@
 ﻿using Application.Validators;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Repositories
 {
     public class CityRepository(AppDBContext appDBContext) : IRepositoty<City>
     {
-        public Task<Guid> Add(City entity, CancellationToken cancellationToken)
+        public Task<OperationResult<Guid>> Add(City entity, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task Delete(Guid id, CancellationToken cancellationToken)
+        public Task<OperationResult<City>> Delete(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Guid?> Edit(City entity, CancellationToken cancellationToken)
+        public Task<OperationResult<Guid>> Edit(City entity, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
-        public async Task<List<City>> GetAll(CancellationToken cancellationToken)
+
+        public async Task<OperationResult<List<City>>> GetAll(CancellationToken cancellationToken)
         {
+            var result = new OperationResult<List<City>>();
             var cities = await appDBContext.Cities.Where(city => !city.DeletedAt.HasValue)
-                .ToListAsync(cancellationToken);
+              .ToListAsync(cancellationToken);
+            if(cities == null) result.StatusCode = Statuses.NotExist;
+            else
+            {
+                result.StatusCode = Statuses.Success;
+                result.Data = cities;
+            }
+            return result;
 
-            return cities;
         }
-        public async Task<City?> GetById(Guid id, CancellationToken cancellationToken)
+
+        public Task<OperationResult<City?>> GetById(Guid id, CancellationToken cancellationToken)
         {
-            var city = await appDBContext.Cities.FirstOrDefaultAsync(act => act.Id == id);
-
-            return city;
+            throw new NotImplementedException();
         }
-        public ValidationResult<Task<City?>> GetByIdTest(Guid id, CancellationToken cancellationToken)
+
+        public Task<OperationResult<Activity>> GetByIdTest(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
     }
-  
+
 }

@@ -1,4 +1,6 @@
 ﻿using Application.DataTransferObjects.Activity;
+using Application.Validators;
+
 
 //using Application.Mediator;
 using Domain.Entities;
@@ -10,29 +12,33 @@ namespace Application.Activities.Queries
     public class GetActivitiesList
     {
 
-        public class Query : IRequest<List<GetActivitiesDTO>> {}
+        public class Query : IRequest<OperationResult<List<GetActivitiesDTO>>> { }
 
-        public class Handler(IRepositoty<Activity> activityRepositoty) :IRequestHandler<Query, List<GetActivitiesDTO>>
+        public class Handler(IRepositoty<Activity> activityRepositoty) : IRequestHandler<Query, OperationResult<List<GetActivitiesDTO>>>
         {
-            public async Task<List<GetActivitiesDTO>> Handle(Query request, CancellationToken cancellationToken = default)
+            public async Task<OperationResult<List<GetActivitiesDTO>>> Handle(Query request, CancellationToken cancellationToken = default)
             {
-                var activities = (await activityRepositoty.GetAll(cancellationToken)
-                  ).Select(activity => new GetActivitiesDTO()
-                  {
-                      CityId = activity.CityId.ToString(),
-                      CityName = activity.City.CityName,
-                      CategoryName = activity.Category.Name,
-                      CategoryId = activity.CategoryId.ToString(),
-                      Date = activity.Date,
-                      Description = activity.Description,
-                      Id = activity.Id.ToString(),
-                      Title = activity.Title,
-                      Venue = activity.Venue,
-                      Latitude = activity.Latitude,
-                      Longitude = activity.Longitude,
-                  }).ToList();
+                var activities = (await activityRepositoty.GetAll(cancellationToken));
 
-                return activities;
+                return new OperationResult<List<GetActivitiesDTO>>()
+                {
+                    Data = activities.Data.Select(activity => new GetActivitiesDTO()
+                    {
+                        CityId = activity.CityId.ToString(),
+                        CityName = activity.City.CityName,
+                        CategoryName = activity.Category.Name,
+                        CategoryId = activity.CategoryId.ToString(),
+                        Date = activity.Date,
+                        Description = activity.Description,
+                        Id = activity.Id.ToString(),
+                        Title = activity.Title,
+                        Venue = activity.Venue,
+                        Latitude = activity.Latitude,
+                        Longitude = activity.Longitude,
+                    }).ToList(),
+                    Message = activities.Message,
+                    StatusCode = activities.StatusCode,
+                };
             }
         }
     }

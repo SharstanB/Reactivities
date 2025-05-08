@@ -5,12 +5,12 @@ using Domain.IRepositories;
 using Domain.Mediator;
 
 
-namespace Application.Cities.Queries;
-public class GetCitiesList
+namespace Application.Categories.Queries;
+public class GetCategoriesList
 {
     public class Query : IRequest<OperationResult<List<BasicListDTO>>> { }
 
-    public class Handler(IRepositoty<City> cityRepositoty) : IRequestHandler<Query, OperationResult<List<BasicListDTO>>>
+    public class Handler(IRepositoty<Category> cityRepositoty) : IRequestHandler<Query, OperationResult<List<BasicListDTO>>>
     {
         public async Task<OperationResult<List<BasicListDTO>>> Handle(Query request, CancellationToken cancellationToken = default)
         {
@@ -20,7 +20,7 @@ public class GetCitiesList
                 Data = cities.Data.Select(c => new BasicListDTO()
                 {
                     Id = c.Id.ToString(),
-                    Name = c.CityName,
+                    Name = c.Name,
                 }).ToList(),
                 Message = cities.Message,
                 Exception = cities.Exception,

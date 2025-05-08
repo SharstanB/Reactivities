@@ -1,37 +1,45 @@
 ﻿using Application.DataTransferObjects.Activity;
+using Application.Validators;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
 
 namespace Application.Activities.Queries
 {
     public class GetActivityDetails
     {
-        public class Query : IRequest<GetActivitiesDTO>
+        public class Query : IRequest<OperationResult<GetActivitiesDTO>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Hanlder (IRepositoty<Activity> activityRepositoty) : IRequestHandler<Query, GetActivitiesDTO>
+        public class Hanlder (IRepositoty<Activity> activityRepositoty) : IRequestHandler<Query, OperationResult<GetActivitiesDTO>>
         {
-            public async Task<GetActivitiesDTO> Handle(Query request, CancellationToken cancellationToken = default)
+            public async Task<OperationResult<GetActivitiesDTO>> Handle(Query request, CancellationToken cancellationToken = default)
             {
                 var result = await activityRepositoty.GetById(request.Id, cancellationToken);
-                var Activity = new GetActivitiesDTO()
+                var data = result.Data;
+                return new OperationResult<GetActivitiesDTO>()
                 {
-                    CityId = result.CityId.ToString(),
-                    CityName = result.City.CityName,
-                    CategoryName = result.Category.Name,
-                    Date = result.Date,
-                    Description = result.Description,
-                    Id = result.Id.ToString(),
-                    Title = result.Title,
-                    CategoryId = result.CategoryId.ToString(),
-                    Venue = result.Venue,
-                    Latitude = result.Latitude,
-                    Longitude = result.Longitude,
+                    Data = new GetActivitiesDTO()
+                    {
+                        CityId = data.CityId.ToString(),
+                        CityName = data.City.CityName,
+                        CategoryName = data.Category.Name,
+                        Date = data.Date,
+                        Description = data.Description,
+                        Id = data.Id.ToString(),
+                        Title = data.Title,
+                        CategoryId =  data.CategoryId.ToString(),
+                        Venue = data.Venue,
+                        Latitude = data.Latitude,
+                        Longitude = data.Longitude,
+                    },
+                    Message = result.Message,
+                    StatusCode = result.StatusCode,
                 };
-                return Activity;
             }
         }
     }

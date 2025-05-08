@@ -1,6 +1,7 @@
 ﻿using Application.Activities.Command;
 using Application.Activities.Queries;
 using Application.DataTransferObjects.Activity;
+using Application.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -12,33 +13,33 @@ public class ActivitiesController : BaseAppController
 {
 
     [HttpGet]
-    public async Task<ActionResult<List<GetActivitiesDTO>>> GetActivities()
+    public async Task<ActionResult<OperationResult<List<GetActivitiesDTO>>>> GetActivities()
     {
         return await Mediator.Send(new GetActivitiesList.Query());
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<GetActivitiesDTO>> GetActivities(Guid id)
-    {
-        var activity = await Mediator.Send(new GetActivityDetails.Query{ Id = id});
-        if (activity is null)
-            return NotFound();
-        return activity ;
-    }
+    //[HttpGet("{id}")]
+    //public async Task<ActionResult<GetActivitiesDTO>> GetActivities(Guid id)
+    //{
+    //    var activity = await Mediator.Send(new GetActivityDetails.Query{ Id = id});
+    //    if (activity is null)
+    //        return NotFound();
+    //    return activity ;
+    //}
 
     [HttpPost]
-    public async Task<ActionResult<string>> AddActivity(CreateActivityDTO activity)
+    public async Task<ActionResult<OperationResult<Guid>>> AddActivity(CreateActivityDTO activity)
     {
-        var newActivityId = await Mediator.Send(new CreateActivity.Command() { Activity = activity });
+        var newActivityResult = await Mediator.Send(new CreateActivity.Command() { Activity = activity });
         
-        return newActivityId;
+        return newActivityResult;
     }
 
     [HttpPut]
-    public async Task<ActionResult<string>> EditActivity(EditActivityDTO activity)
+    public async Task<ActionResult<OperationResult<Guid>>> EditActivity(EditActivityDTO activity)
     {
-        var newActivityId = await Mediator.Send(new EditActivity.Command() { Activity = activity });
-        return newActivityId;
+        var editActivityResult = await Mediator.Send(new EditActivity.Command() { Activity = activity });
+        return editActivityResult;
     }
 
     [HttpDelete("{id}")]

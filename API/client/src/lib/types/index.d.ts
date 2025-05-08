@@ -1,3 +1,9 @@
+type ApiResponse<T> = {
+    data: T;
+    message: string;
+    statusCode: number;
+  };
+
 type Activity = {
     id: string
     description: string

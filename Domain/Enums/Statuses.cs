@@ -9,12 +9,12 @@ namespace Domain.Enums
     public enum Statuses
     {
         UnKnown,
-        Success,
-        Exist,
-        NotExist,
-        Failed,
-        Forbidden,
-        Exception, 
-        Unauthorized
+        Success = 200,
+        Exist = 202,
+        NotExist = 404,
+        Failed = 400,
+        Forbidden = 403,
+        Exception = 500,  
+        Unauthorized = 401
     }
 }

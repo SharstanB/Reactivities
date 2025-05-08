@@ -4,14 +4,15 @@ import ActivityCard from './ActivityCard';
 
 
 export default function  ActivityList() {
-  const {activities, isPending} = useActivities();
+  const {activityResult, isPending} = useActivities();
  
-  if(!activities || isPending ) 
-  <Typography> Is Loading ... </Typography>
+  console.log(activityResult);
+  if(!activityResult || isPending  ) 
+   return (<Typography> Is Loading ... </Typography>)
 
   return (
-    <Grid sx={{ display: 'flex', flexDirection: 'column', gap :3}}   >
-      {activities?.map((activity) => (
+     <Grid sx={{ display: 'flex', flexDirection: 'column', gap :3}}   >
+      {activityResult?.map((activity: Activity) => (
         <ActivityCard key={activity.id}  activity={activity} 
         />
       ))}

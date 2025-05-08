@@ -1,5 +1,6 @@
 ﻿using Application.Cities.Queries;
 using Application.DataTransferObjects;
+using Application.Validators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,7 +10,7 @@ namespace API.Controllers
     public class CitiesController : BaseAppController
     {
         [HttpGet]
-        public async Task<ActionResult<List<BasicListDTO>>> GetCities()
+        public async Task<ActionResult<OperationResult<List<BasicListDTO>>>> GetCities()
         {
             var cities = await Mediator.Send(new GetCitiesList.Query());
             return cities;
