@@ -2,6 +2,7 @@
 using Application.Cities.Queries;
 using Application.DataTransferObjects;
 using Application.Validators;
+using Domain.Services.Validation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

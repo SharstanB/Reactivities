@@ -1,12 +1,11 @@
 using API;
-using Application.Activities.Queries;
-
-//using Application.Mediator;
+using Application.Activities.Command;
 using Application.Repositories;
 using Application.Validators.Activities;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
+using Domain.Services.Exceptions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -25,20 +24,29 @@ builder.Services.AddDbContext<AppDBContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
+builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<EditActivityValidator>();
+
+
 builder.Services.AddScoped<IMediator, Mediator>();
 
-builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
-//Register Handlers Automatically
+
 builder.Services.Scan(scan => scan
-    .FromAssemblyOf<GetActivitiesList>()// Scan Application assembly
+    .FromAssemblyOf<CreateActivity>()// Scan Application assembly
     .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)))
     .AsImplementedInterfaces()
     .WithScopedLifetime());
 
-builder.Services.AddScoped<IRepositoty<Activity>, ActivityRepository>();
-builder.Services.AddScoped<IRepositoty<City>, CityRepository>();
-builder.Services.AddScoped<IRepositoty<Category>, CategoryRepository>();
+//builder.Services.AddScoped<IPipelineBehavior<CreateActivity.Command, OperationResult<Guid>>, ValidationBehavior<CreateActivity.Command, OperationResult<Guid>>>();
 
+builder.Services.AddTransient<ExceptionMiddleware>();
+
+
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<ActivityRepository>() // or typeof(AnyRepositoryInTargetAssembly)
+    .AddClasses(classes => classes.AssignableTo(typeof(IRepositoty<>)))
+    .AsImplementedInterfaces()
+    .WithScopedLifetime());
 
 builder.Services.AddHostedService<DataBaseSeeder>();
 
@@ -51,6 +59,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors("AllowReactApp");
 

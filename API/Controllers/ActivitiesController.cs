@@ -2,6 +2,7 @@
 using Application.Activities.Queries;
 using Application.DataTransferObjects.Activity;
 using Application.Validators;
+using Domain.Services.Validation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;

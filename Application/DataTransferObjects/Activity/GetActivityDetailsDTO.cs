@@ -10,7 +10,6 @@ namespace Application.DataTransferObjects.Activity
     {
         public List<GetActivitiesDTO> Activities { get; set; }
         public List<BasicListDTO> Cities { get; set; }
-
         public List<BasicListDTO> Categories { get; set; }
     }
 }

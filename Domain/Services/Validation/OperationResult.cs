@@ -1,13 +1,7 @@
 ﻿using Domain.Enums;
-using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Validators
+
+namespace Domain.Services.Validation
 {
     public class OperationResult<T> 
     {
@@ -17,8 +11,8 @@ namespace Application.Validators
 
         public Statuses StatusCode { get;  set; }
 
-        public Exception Exception { get; set; }
-        public bool IsSuccess() => (StatusCode == Statuses.Success || StatusCode == Statuses.Exist);
+        public string? ExceptionDetails { get; set; }
+        public bool IsSuccess() => StatusCode == Statuses.Success || StatusCode == Statuses.Exist;
 
 
         //private Statuses _status;

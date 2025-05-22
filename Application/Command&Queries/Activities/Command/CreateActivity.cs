@@ -2,8 +2,9 @@
 using Domain.Entities;
 using Domain.Mediator;
 using Application.DataTransferObjects.Activity;
-using Application.Validators;
 using FluentValidation;
+using Domain.Enums;
+using Domain.Services.Validation;
 namespace Application.Activities.Command
 {
     public class CreateActivity
@@ -14,16 +15,24 @@ namespace Application.Activities.Command
 
         }
 
-        public class Handler (IRepositoty<Activity> activityRepositoty, IValidator<Command> validator) :
-            IRequestHandler<Command, OperationResult<Guid>>
+        public class Handler(IRepositoty<Activity> activityRepositoty,IValidator<Command> validator)
+            : IRequestHandler<Command, OperationResult<Guid>>
         {
             public async Task<OperationResult<Guid>> Handle(Command request, CancellationToken cancellationToken = default)
             {
+
+                //TODO  I should find a way for this garbage 
                 var validationResult = await validator.ValidateAsync(request, cancellationToken);
                 if (!validationResult.IsValid)
                 {
-                    return new OperationResult<Guid>() { Message = validationResult.Errors.Select(a=> a.ErrorMessage.ToString()).ToString() };
+                    return new OperationResult<Guid>()
+                    {
+                        ExceptionDetails = (new ValidationException(validationResult.Errors)).Message,
+                        Message = string.Join(",", validationResult.Errors),
+                        StatusCode = Statuses.Exception,
+                    };
                 }
+
                 var Activity = new Activity()
                 {
                     CityId = request.Activity.CityId,

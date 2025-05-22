@@ -1,0 +1,44 @@
+﻿using Domain.Entities;
+using Domain.Enums;
+using Domain.IRepositories;
+using Domain.Services.Validation;
+using Microsoft.Extensions.DependencyInjection;
+using Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Repositories
+{
+    public class Repository<T>
+        where T : class
+    {
+        protected readonly AppDBContext _appDBContext;
+        public Repository(AppDBContext appDBContext)
+        {
+            _appDBContext = appDBContext;
+        }
+        public async Task<OperationResult<TResponse>> SaveDataChanges<TResponse>( T entity, CancellationToken
+           cancellationToken)
+        {
+            var operationResult = new OperationResult<TResponse>();
+            try
+            {
+                await _appDBContext.SaveChangesAsync(cancellationToken);
+                operationResult.StatusCode = Statuses.Success;
+            }
+            catch (Exception e)
+            {
+                operationResult.StatusCode = Statuses.Exception;
+                operationResult.Message = $"There is {Statuses.Exception.ToString()} in Database, please recheck";
+                operationResult.ExceptionDetails = e.StackTrace;
+            }
+
+            return operationResult;
+        }
+    } }
+    
+     
+

@@ -1,4 +1,6 @@
-﻿namespace Domain.Mediator
+﻿using FluentValidation;
+
+namespace Domain.Mediator
 {
     public interface IMediator
     {

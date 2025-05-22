@@ -1,12 +1,8 @@
 ﻿using Application.DataTransferObjects.Activity;
-using Application.Validators;
-
-
-//using Application.Mediator;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
-
+using Domain.Services.Validation;
 
 namespace Application.Activities.Command
 {

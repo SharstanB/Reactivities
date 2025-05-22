@@ -1,6 +1,5 @@
-﻿using Application.Validators;
-using Domain.Entities;
-
+﻿using Domain.Entities;
+using Domain.Services.Validation;
 
 namespace Domain.IRepositories
 {

@@ -1,22 +1,25 @@
-﻿using Application.HelperMethods;
-using Application.Validators;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Enums;
 using Domain.IRepositories;
+using Domain.Services.Validation;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System.Threading.Tasks;
+using Persistence.HelperMethods;
 
 namespace Application.Repositories
 {
-    public class ActivityRepository(AppDBContext appDBContext) : IRepositoty<Activity>
+    public class ActivityRepository : Repository<Activity>, IRepositoty<Activity>
     {
+        public ActivityRepository(AppDBContext appDBContext) : base(appDBContext)
+        {
+        }
+
         public async Task<OperationResult<Guid>> Add(Activity activity, CancellationToken cancellationToken)
         {
             var result = new OperationResult<Guid>();
-            appDBContext.Activities.Add(activity); // review why to not use AddAsync
-            result = await appDBContext.SaveDataChanges(result, cancellationToken);
-            result.Data = activity.Id;
+            _appDBContext.Activities.Add(activity); // review why to not use AddAsync
+            result = await SaveDataChanges<Guid>(activity, cancellationToken);
+            result.Data = result.IsSuccess() ? activity.Id : default;
             return result;
         }
 
@@ -25,7 +28,7 @@ namespace Application.Repositories
         {
             var result = new OperationResult<Guid>();
 
-            var activityToEdit = await appDBContext.Activities.FirstOrDefaultAsync(act => act.Id == activity.Id);
+            var activityToEdit = await _appDBContext.Activities.FirstOrDefaultAsync(act => act.Id == activity.Id);
 
             if (activityToEdit == null)
             {
@@ -44,16 +47,16 @@ namespace Application.Repositories
                 activityToEdit.CategoryId = activity.CategoryId;
                 activityToEdit.City = activity.City;
                 activityToEdit.CityId = activity.CityId;
-                appDBContext.Activities.Update(activityToEdit);
-                result = await appDBContext.SaveDataChanges(result, cancellationToken);
+                _appDBContext.Activities.Update(activityToEdit);
+                result =  await SaveDataChanges<Guid>(activity, cancellationToken);
             }
-               
+
             return result;
         }
         public async Task<OperationResult<List<Activity>>> GetAll(CancellationToken cancellationToken)
         {
             var result = new OperationResult<List<Activity>>();
-            var activities = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
+            var activities = await _appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
                 .Where(activity => !activity.DeletedAt.HasValue)
                 .OrderBy(activity => activity.CreatedAt)
                 .ToListAsync(cancellationToken);
@@ -68,7 +71,7 @@ namespace Application.Repositories
         public  async Task<OperationResult<Activity>> GetById(Guid id, CancellationToken cancellationToken)
         {
             var result = new OperationResult<Activity>();
-            var activity = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
+            var activity = await _appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
                 .FirstOrDefaultAsync(act => act.Id == id);
             if (activity == null) result.StatusCode = Statuses.NotExist;
             else
@@ -81,14 +84,14 @@ namespace Application.Repositories
         public async Task<OperationResult<Activity>> Delete(Guid id, CancellationToken cancellationToken)
         {
             var result = new OperationResult<Activity>();
-            var activity = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
+            var activity = await _appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
                 .FirstOrDefaultAsync(act => act.Id == id);
             if (activity == null) result.StatusCode = Statuses.NotExist;
             else
             {
                 activity.DeletedAt = DateTime.UtcNow;
-                appDBContext.Activities.Update(activity);
-                result = await appDBContext.SaveDataChanges(result, cancellationToken);
+                _appDBContext.Activities.Update(activity);
+                result = await SaveDataChanges<Activity>(activity, cancellationToken);
             }
             return result;
         }
@@ -98,7 +101,7 @@ namespace Application.Repositories
         {
             var result = new OperationResult<Activity>();
 
-            var activity = await appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
+            var activity = await _appDBContext.Activities.Include(a => a.City).Include(a => a.Category)
                 .FirstOrDefaultAsync(act => act.Id == id);
             if(activity == null) result.StatusCode = Statuses.NotExist;
             else

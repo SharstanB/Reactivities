@@ -3,7 +3,7 @@ using Application.Validators;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
-
+using Domain.Services.Validation;
 
 namespace Application.Cities.Queries;
 public class GetCitiesList
@@ -23,7 +23,7 @@ public class GetCitiesList
                     Name = c.CityName,
                 }).ToList(),
                 Message = cities.Message,
-                Exception = cities.Exception,
+                ExceptionDetails = cities.ExceptionDetails,
                 StatusCode = cities.StatusCode,
             };
         }
