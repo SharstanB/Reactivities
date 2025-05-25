@@ -7,6 +7,8 @@ import { RouterProvider } from 'react-router'
 import { router } from "./app/router/routes";
 import { store } from './lib/stores/Store'
 import { StoreContext } from './lib/stores/Store'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const queryClient = new QueryClient();
 
@@ -16,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
        <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />
+        <ToastContainer  position='bottom-right' theme='colored' hideProgressBar={true} />
       </QueryClientProvider>
       </StoreContext.Provider>
     </StrictMode>

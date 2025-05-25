@@ -3,12 +3,10 @@ import { Avatar, Box, Card, Paper, TextField, Typography } from "@mui/material";
 export default function ActivityDetailsChat() {
   return (
     <Card style={{ margin: "20px auto", position: "relative", color: "#fff" }} >
-      {/* Header */}
       <Box bgcolor="primary.main" color="primary.contrastText" p={2} textAlign="center">
         <Typography variant="h6">Chat about this event</Typography>
       </Box>
 
-      {/* Input Field */}
       <Box margin={2} >
         <TextField
           fullWidth
@@ -16,11 +14,8 @@ export default function ActivityDetailsChat() {
           placeholder="Enter your comment (Enter to submit, SHIFT + Enter for new line)"
           multiline
           rows={4}
-        
         />
       </Box>
-
-      {/* Comment Section */}
       <Box mt={2}>
         <Paper elevation={1} style={{ padding: '16px', display: 'flex', alignItems: 'center' }}>
           <Avatar style={{ marginRight: '8px' }}>B</Avatar>
@@ -30,7 +25,6 @@ export default function ActivityDetailsChat() {
             <Typography variant="body1">Comment goes here</Typography>
           </Box>
         </Paper>
-        
       </Box>
     </Card>
   );

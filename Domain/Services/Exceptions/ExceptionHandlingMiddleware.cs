@@ -46,7 +46,7 @@ namespace Domain.Services.Exceptions
                
                 var json = JsonSerializer.Serialize(operationResult);
 
-                context.Response.StatusCode = 400;
+                context.Response.StatusCode = 500;
                 context.Response.ContentType = "application/json";
 
                 await context.Response.WriteAsync(json);

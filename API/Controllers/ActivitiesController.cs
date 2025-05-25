@@ -19,14 +19,14 @@ public class ActivitiesController : BaseAppController
         return await Mediator.Send(new GetActivitiesList.Query());
     }
 
-    //[HttpGet("{id}")]
-    //public async Task<ActionResult<GetActivitiesDTO>> GetActivities(Guid id)
-    //{
-    //    var activity = await Mediator.Send(new GetActivityDetails.Query{ Id = id});
-    //    if (activity is null)
-    //        return NotFound();
-    //    return activity ;
-    //}
+    [HttpGet("{id}")]
+    public async Task<ActionResult<OperationResult<GetActivitiesDTO>>> GetActivities(Guid id)
+    {
+        var activity = await Mediator.Send(new GetActivityDetails.Query { Id = id });
+        if (activity is null)
+            return NotFound();
+        return activity;
+    }
 
     [HttpPost]
     public async Task<ActionResult<OperationResult<Guid>>> AddActivity(CreateActivityDTO activity)

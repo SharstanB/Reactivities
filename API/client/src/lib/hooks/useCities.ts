@@ -5,7 +5,7 @@ export const useCities = () => {
     const {data: citieslist} =  useQuery({
         queryKey: ['cities'],
           queryFn: async () => {
-            const response = await agent.get<BasicListObject[]>('/Cities');
+            const response = await agent.get<ApiResponse<BasicListObject[]>>('/Cities');
             console.log(response.data.data);
           return response.data.data;
         },

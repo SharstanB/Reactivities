@@ -10,48 +10,59 @@ import {
   Typography,
 } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
-import { FormEvent, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import {useCities} from "../../../lib/hooks/useCities";
 import {useCategories} from "../../../lib/hooks/useCategories";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { FormatDate } from "../../../lib/util/util";
-
+import { FieldValues, useForm } from "react-hook-form";
 export default function ActivityForm() {
-  const navigation = useNavigate();
+
+  const {register, reset, handleSubmit} = useForm();
+  // const navigation = useNavigate();
   const {id} = useParams();
+  const { updateActivity, createActivity , activityDetail ,isLoadingActivity } = useActivities(id);
   const {citieslist} = useCities();
   const {categorieslist} = useCategories();
   const [selectedCity, setCity] = useState('');
   const [selectedCategory, setCategory] = useState('');
-  const { updateActivity, createActivity , activityDetail ,isLoadingActivity } = useActivities(id);
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formDate = new FormData(event.currentTarget);
-    const data: { [key: string]: FormDataEntryValue } = {};
-    formDate.forEach((value, key) => {
-      data[key] = value;
-    });
-    data.cityId =  selectedCity.length === 0 ? activityDetail?.cityId : selectedCity;
-    data.categoryId =  selectedCategory.length === 0 ? activityDetail?.categoryId : selectedCategory;
-    if (activityDetail?.id) {
-      data.id = activityDetail.id;
-      console.log(data);
-      updateActivity.mutate(data as unknown as Activity);
-      navigation(`/activities/${data.id}`);
-    } else {
-      createActivity.mutate(data as unknown as Activity);
-      navigation('/activities');
-    }
+
+  useEffect(() => {
+    if(activityDetail) reset(activityDetail);
+  }, [activityDetail, reset ])
+  const onSubmit = (data : FieldValues) => {
+    console.log(data);
+  }
+  // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const formDate = new FormData(event.currentTarget);
+  //   const data: { [key: string]: FormDataEntryValue } = {};
+  //   formDate.forEach((value, key) => {
+  //     data[key] = value;
+  //   });
+  //   data.cityId =  selectedCity.length === 0 ? activityDetail?.cityId : selectedCity;
+  //   data.categoryId =  selectedCategory.length === 0 ? activityDetail?.categoryId : selectedCategory;
+  //   if (activityDetail?.id) {
+  //     data.id = activityDetail.id;
+  //     console.log(data);
+  //     updateActivity.mutate(data as unknown as Activity);
+  //     navigation(`/activities/${data.id}`);
+  //   } else {
+  //     createActivity.mutate(data as unknown as Activity);
+  //     navigation('/activities');
+  //   }
    
-  };
+  // };
+
   const handleCategoryChange = (event: SelectChangeEvent) =>{
       setCategory(event.target.value as string);
   }
 
   const handleCityChange = (event: SelectChangeEvent) =>{
     setCity(event.target.value as string);
-}
+  }
+  
   if(isLoadingActivity) return <Typography> isLoading...</Typography>
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
@@ -60,16 +71,16 @@ export default function ActivityForm() {
       </Typography>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         sx={{ display: "flex", flexDirection: "column", gap: 3 }}
       >
         <TextField
-          name="title"
+           {...register('title')}
           label="Title"
           defaultValue={activityDetail?.title}
         ></TextField>
 
-        <FormControl fullWidth>
+        {/* <FormControl fullWidth> */}
           <InputLabel id="demo-simple-select-label">Category</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -84,9 +95,9 @@ export default function ActivityForm() {
               <MenuItem key={category.id}  value={category.id}>{category.name}</MenuItem>
             ))}
           </Select>
-        </FormControl>
+        {/* </FormControl> */}
         <TextField
-          name="date"
+          {...register('date')}
           label="Date"
           type="date"
           defaultValue={
@@ -96,7 +107,7 @@ export default function ActivityForm() {
           }
         ></TextField>
         <TextField
-          name="description"
+          {...register('description')}
           label="Description"
           multiline
           rows={3}
@@ -120,7 +131,7 @@ export default function ActivityForm() {
         </FormControl>
 
         <TextField
-          name="venue"
+          {...register('venue')}
           label="Venue"
           defaultValue={activityDetail?.venue}
         ></TextField>

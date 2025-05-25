@@ -5,8 +5,7 @@ export const useCategories = () => {
     const {data: categorieslist} =  useQuery({
         queryKey: ['categories'],
           queryFn: async () => {
-            const response = await agent.get<BasicListObject[]>('/Categories');
-            console.log(response.data.data);
+            const response = await agent.get<ApiResponse<BasicListObject[]>>('/Categories');
           return response.data.data;
         },
         staleTime: 1000 * 60 * 5

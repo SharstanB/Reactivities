@@ -8,12 +8,13 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
+import {Link} from 'react-router'
 import { FormatDate } from "../../../lib/util/util";
 type Props = {
     activity : Activity,
    } 
 export default function ActivityDetailsHeader({activity}: Props) {
-  const isCancelled = true;
+  const isCancelled = false;
   const isHost = true;
   const isGoing = false;
   const loading = false;
@@ -21,9 +22,7 @@ export default function ActivityDetailsHeader({activity}: Props) {
 
   return (
     <Card style={{  position: "relative", color: "#fff" }}>
-      {/* {isCancelled && ( */}
       <Badge sx={{ position: "absolute", left: 40, top: 20, zIndex: 1000 }} />
-      {/* )} */}
       <CardMedia
         component="img"
         alt="Scenic View"
@@ -69,11 +68,11 @@ export default function ActivityDetailsHeader({activity}: Props) {
           color="primary"
           style={{ marginLeft: "10px" }}
           disabled={isCancelled || loading}
+          component={Link} to={`/editActivity/${activity.id}`}
         >
           {isGoing ? 'Cancel Activity' : 'Join Axctivity'} 
         </Button></>)
         }
-       
       </CardActions>
     </Card>
   );
