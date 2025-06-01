@@ -1,39 +1,44 @@
 import {
   Box,
   Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
-import { SelectChangeEvent } from '@mui/material/Select';
-import {  useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
-import {useCities} from "../../../lib/hooks/useCities";
-import {useCategories} from "../../../lib/hooks/useCategories";
+import { useCities } from "../../../lib/hooks/useCities";
+import { useCategories } from "../../../lib/hooks/useCategories";
 import { Link, useParams } from "react-router";
 import { FormatDate } from "../../../lib/util/util";
-import { FieldValues, useForm } from "react-hook-form";
-export default function ActivityForm() {
+import { useForm } from "react-hook-form";
+import {
+  activitySchema,
+  ActivitySchema,
+} from "../../../lib/schemas/activitySchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import TextInput from "../../../app/share/components/TextInput";
+import SelectInput from "../../../app/share/components/SelectInput";
 
-  const {register, reset, handleSubmit} = useForm();
-  // const navigation = useNavigate();
-  const {id} = useParams();
-  const { updateActivity, createActivity , activityDetail ,isLoadingActivity } = useActivities(id);
-  const {citieslist} = useCities();
-  const {categorieslist} = useCategories();
-  const [selectedCity, setCity] = useState('');
-  const [selectedCategory, setCategory] = useState('');
+export default function ActivityForm() {
+  const { register, reset, handleSubmit, control } = useForm<ActivitySchema>({
+    mode: "onTouched",
+    resolver: zodResolver(activitySchema),
+  });
+  const { id } = useParams();
+  const { updateActivity, createActivity, activityDetail, isLoadingActivity } =
+    useActivities(id);
+  const { citieslist } = useCities();
+  const { categorieslist } = useCategories();
+  // const [selectedCity, setCity] = useState("");
+  // const [selectedCategory, setCategory] = useState("");
 
   useEffect(() => {
-    if(activityDetail) reset(activityDetail);
-  }, [activityDetail, reset ])
-  const onSubmit = (data : FieldValues) => {
+    // if (activityDetail) reset(activityDetail);
+  }, [activityDetail, reset]);
+  const onSubmit = (data: ActivitySchema) => {
     console.log(data);
-  }
+  };
   // const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
   //   event.preventDefault();
   //   const formDate = new FormData(event.currentTarget);
@@ -52,68 +57,86 @@ export default function ActivityForm() {
   //     createActivity.mutate(data as unknown as Activity);
   //     navigation('/activities');
   //   }
-   
+
   // };
 
-  const handleCategoryChange = (event: SelectChangeEvent) =>{
-      setCategory(event.target.value as string);
-  }
+  // const handleCategoryChange = (event: SelectChangeEvent) => {
+  //   setCategory(event.target.value);
+  // };
 
-  const handleCityChange = (event: SelectChangeEvent) =>{
-    setCity(event.target.value as string);
-  }
-  
-  if(isLoadingActivity) return <Typography> isLoading...</Typography>
+  // const handleCityChange = (event: SelectChangeEvent) => {
+  //   setCity(event.target.value as string);
+  // };
+
+  if (isLoadingActivity) return <Typography> isLoading...</Typography>;
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
       <Typography gutterBottom variant="h5" color="warning">
-       {activityDetail ? 'Edit Activity': 'Create Activity'} 
+        {activityDetail ? "Edit Activity" : "Create Activity"}
       </Typography>
+
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         sx={{ display: "flex", flexDirection: "column", gap: 3 }}
       >
-        <TextField
-           {...register('title')}
-          label="Title"
-          defaultValue={activityDetail?.title}
-        ></TextField>
+        <TextInput 
+          label='Title'
+          control= {control}
+          name="title"></TextInput>
 
-        {/* <FormControl fullWidth> */}
-          <InputLabel id="demo-simple-select-label">Category</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={
-              selectedCategory.length === 0 ? activityDetail?.categoryId : selectedCategory
-            }
-            label="City"
-            onChange={handleCategoryChange}
-          >
-            {categorieslist?.map((category) => (
-              <MenuItem key={category.id}  value={category.id}>{category.name}</MenuItem>
-            ))}
-          </Select>
-        {/* </FormControl> */}
+
+        <SelectInput label='Category' 
+          items={categorieslist} 
+          name='category' 
+          control={control}  >
+        </SelectInput>
+        {/*
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={
+            selectedCategory.length === 0
+              ? activityDetail?.categoryId
+              : selectedCategory
+          }
+          label="Category"
+          onChange={handleCategoryChange}
+        >
+          {categorieslist?.map((category) => (
+            <MenuItem key={category.id} value={category.id}>
+              {category.name}
+            </MenuItem>
+          ))}
+        </Select> */}
+
         <TextField
-          {...register('date')}
+          {...register("date")}
           label="Date"
           type="date"
+          // error={!!errors.date}
+          // helperText= {errors.date?.message}
           defaultValue={
             activityDetail?.date
               ? FormatDate(activityDetail.date)
               : FormatDate(new Date())
           }
         ></TextField>
-        <TextField
-          {...register('description')}
-          label="Description"
+
+        <TextInput
+          label='Description'
           multiline
           rows={3}
-          defaultValue={activityDetail?.description}
-        ></TextField>
-        <FormControl fullWidth>
+          control ={control}
+          name='description'
+        ></TextInput>
+
+        <SelectInput label='City' 
+          items={citieslist} 
+          name='city' 
+          control={control}  >
+        </SelectInput>
+        {/* <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">City</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -125,22 +148,28 @@ export default function ActivityForm() {
             onChange={handleCityChange}
           >
             {citieslist?.map((city) => (
-              <MenuItem key={city.id} value={city.id}>{city.name}</MenuItem>
+              <MenuItem key={city.id} value={city.id}>
+                {city.name}
+              </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
 
-        <TextField
-          {...register('venue')}
-          label="Venue"
-          defaultValue={activityDetail?.venue}
-        ></TextField>
+        <TextInput
+          label= "Venue"
+          control = {control}
+          name="venue"
+        />
+
         <Box sx={{ display: "flex", justifyContent: "end", gap: 3, mt: 4 }}>
-          <Button component={Link}  to={'/activities'} color="inherit">
+          <Button component={Link} to={"/activities"} color="inherit">
             Cancle
           </Button>
-          <Button color="success" variant="contained" type="submit"
-           disabled={updateActivity.isPending || createActivity.isPending}
+          <Button
+            color="success"
+            variant="contained"
+            type="submit"
+            disabled={updateActivity.isPending || createActivity.isPending}
           >
             Submit
           </Button>

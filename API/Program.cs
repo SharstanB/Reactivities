@@ -31,7 +31,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<EditActivityValidator>();
 builder.Services.AddScoped<IMediator, Mediator>();
 
 
-builder.Services.Scan(scan => scan
+builder.Services.Scan(scan => scan 
     .FromAssemblyOf<CreateActivity>()// Scan Application assembly
     .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)))
     .AsImplementedInterfaces()
