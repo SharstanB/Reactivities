@@ -6,7 +6,6 @@ export default function MenuItemLink({children , to}:{children:ReactNode, to:str
   return (
     <MenuItem  component={NavLink} to={to} 
         sx={{fontSize: '1.2rem',
-            // textTransform: 'uppercase',
             fontWeight: 'bold',
             color: 'inherit',
             '&.active':{

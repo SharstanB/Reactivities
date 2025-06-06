@@ -1,10 +1,7 @@
 ﻿using Application.DataTransferObjects.Activity;
-using Application.Validators;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System;
 using Domain.Services.Validation;
 
 namespace Application.Activities.Queries

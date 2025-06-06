@@ -1,5 +1,4 @@
 ﻿using Application.DataTransferObjects;
-using Application.Validators;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;

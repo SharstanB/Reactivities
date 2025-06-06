@@ -23,10 +23,10 @@ namespace Application.Validators.Activities
             RuleFor(x => Selector(x).Description).NotEmpty().WithMessage("Description most not be empty");
             RuleFor(x => Selector(x).Venue).NotEmpty().WithMessage("Venue most not be empty");
             RuleFor(x => Selector(x).Latitude)
-                    .NotEmpty().WithMessage("Latitude most not be empty")
+                    //.NotEmpty().WithMessage("Latitude most not be empty")
                     .InclusiveBetween(-90, 90).WithMessage("Latitude most be between -90 & 90");
             RuleFor(x => Selector(x).Longitude)
-                    .NotEmpty().WithMessage("Longitude most not be empty")
+                    //.NotEmpty().WithMessage("Longitude most not be empty")
                     .InclusiveBetween(-180, 180).WithMessage("Longitude most be between -180 & 180");
         }
     }

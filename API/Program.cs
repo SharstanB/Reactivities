@@ -2,7 +2,6 @@ using API;
 using Application.Activities.Command;
 using Application.Repositories;
 using Application.Validators.Activities;
-using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
 using Domain.Services.Exceptions;

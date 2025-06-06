@@ -1,6 +1,5 @@
 ﻿using Application.Activities.Command;
 using Application.DataTransferObjects.Activity;
-using FluentValidation;
 
 namespace Application.Validators.Activities
 {

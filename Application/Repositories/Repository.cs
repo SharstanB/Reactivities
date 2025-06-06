@@ -1,14 +1,6 @@
-﻿using Domain.Entities;
-using Domain.Enums;
-using Domain.IRepositories;
+﻿using Domain.Enums;
 using Domain.Services.Validation;
-using Microsoft.Extensions.DependencyInjection;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Repositories
 {

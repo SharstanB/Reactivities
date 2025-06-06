@@ -4,7 +4,6 @@ using Domain.IRepositories;
 using Domain.Services.Validation;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Persistence.HelperMethods;
 
 namespace Application.Repositories
 {

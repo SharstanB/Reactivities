@@ -9,11 +9,13 @@ import { store } from './lib/stores/Store'
 import { StoreContext } from './lib/stores/Store'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StoreContext.Provider value={store}>
       <QueryClientProvider client={queryClient}>
        <RouterProvider router={router} />
@@ -21,6 +23,7 @@ createRoot(document.getElementById('root')!).render(
         <ToastContainer  position='bottom-right' theme='colored' hideProgressBar={true} />
       </QueryClientProvider>
       </StoreContext.Provider>
+      </LocalizationProvider>
     </StrictMode>
  
 )

@@ -1,24 +1,23 @@
 import { TextField, TextFieldProps } from '@mui/material';
-import { UseControlledProps } from '@mui/utils/useControlled';
-import { FieldValues, useController } from 'react-hook-form'
+import { Control, FieldValues, Path, useController } from 'react-hook-form'
 
 type Props<T extends FieldValues> = {
-  
- } & UseControlledProps<T> & TextFieldProps
+  control: Control<T>;
+  name: Path<T>;
+} & Omit<TextFieldProps, 'name'>
 
-export default function TextInput<T extends FieldValues>(props:Props<T>) {
-
-  const {field, fieldState} = useController({...props});
+export default function TextInput<T extends FieldValues>({ control, name, ...props }: Props<T>) {
+  const { field, fieldState } = useController({ control, name });
 
   return (
-   <TextField
-    {...props}
-    {...field}
-    value={ field.value || ''}
-    fullWidth 
-    variant='outlined' 
-    error={!!fieldState.error}
-    helperText={fieldState.error?.message}>
-   </TextField>  
+    <TextField
+      {...props}
+      {...field}
+      value={field.value || ''}
+      fullWidth
+      variant='outlined'
+      error={!!fieldState.error}
+      helperText={fieldState.error?.message}
+    />
   )
 }
