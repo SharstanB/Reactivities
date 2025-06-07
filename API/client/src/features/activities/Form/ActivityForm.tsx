@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
-import { useCities } from "../../../lib/hooks/useCities";
+// import { useCities } from "../../../lib/hooks/useCities";
 import { useCategories } from "../../../lib/hooks/useCategories";
 import { Link, useParams } from "react-router";
 import { useForm } from "react-hook-form";
@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../../../app/share/components/TextInput";
 import SelectInput from "../../../app/share/components/SelectInput";
 import DataInput from "../../../app/share/components/DataInput";
+import LocationInput from "../../../app/share/components/LocationInput";
 import { router } from "../../../app/router/routes";
 
 export default function ActivityForm() {
@@ -28,7 +29,7 @@ export default function ActivityForm() {
   const { id } = useParams();
   const { updateActivity, createActivity, activityDetail, isLoadingActivity } =
     useActivities(id);
-  const { citieslist } = useCities();
+  // const { citieslist } = useCities();
   const { categorieslist } = useCategories();
 
   // You receive new activity details from an API and want to auto-fill the form:
@@ -74,16 +75,21 @@ export default function ActivityForm() {
           control ={control}
           name='description'
         ></TextInput>
-        <SelectInput label='City' 
+        {/* <SelectInput label='City' 
           items={citieslist} 
           name='cityId' 
           control={control}  >
-        </SelectInput>
-        <TextInput
+        </SelectInput> */}
+        {/* <TextInput
           label= "Venue"
           control = {control}
           name="venue"
-        />
+        /> */}
+        <LocationInput 
+        control={control} 
+        lable='Enter the location' 
+        name='location'></LocationInput>
+        
         <Box sx={{ display: "flex", justifyContent: "end", gap: 3, mt: 4 }}>
           <Button component={Link} to={"/activities"} color="inherit">
             Cancle

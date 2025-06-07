@@ -24,8 +24,32 @@ type BasicListObject = {
     name : string
 }
 
-// type ActivityLists = {
-//     activities : Activity[],
-//     cities: BasicListObject[],
-//     categories: BasicListObject[]
-// }
+type LocationIQ = {
+  place_id: string
+  osm_id: string
+  osm_type: string
+  licence: string
+  lat: string
+  lon: string
+  boundingbox: string[]
+  class: string
+  type: string
+  display_name: string
+  display_place: string
+  display_address: string
+  address: Address
+}
+
+type AddressIQ = {
+  name: string
+  road?: string
+  suburb?: string
+  city: string
+  county: string
+  state: string
+  postcode: string
+  country: string
+  country_code: string
+  house_number?: string
+  neighbourhood?: string
+}
