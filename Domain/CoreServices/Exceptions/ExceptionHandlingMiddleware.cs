@@ -1,5 +1,5 @@
-﻿using Domain.Enums;
-using Domain.Services.Validation;
+﻿using Domain.CoreServices;
+using Domain.Enums;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;

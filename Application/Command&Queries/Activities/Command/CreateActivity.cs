@@ -4,7 +4,7 @@ using Domain.Mediator;
 using Application.DataTransferObjects.Activity;
 using FluentValidation;
 using Domain.Enums;
-using Domain.Services.Validation;
+using Domain.CoreServices;
 namespace Application.Activities.Command
 {
     public class CreateActivity

@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
+﻿using Domain.CoreServices;
+using Domain.Entities;
 using Domain.Enums;
 using Domain.IRepositories;
-using Domain.Services.Validation;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 

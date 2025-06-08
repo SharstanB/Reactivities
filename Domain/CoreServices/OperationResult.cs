@@ -1,7 +1,7 @@
 ﻿using Domain.Enums;
 
 
-namespace Domain.Services.Validation
+namespace Domain.CoreServices
 {
     public class OperationResult<T> 
     {

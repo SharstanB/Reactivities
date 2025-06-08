@@ -1,8 +1,8 @@
 ﻿using Application.DataTransferObjects;
+using Domain.CoreServices;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
-using Domain.Services.Validation;
 
 namespace Application.Categories.Queries;
 public class GetCategoriesList

@@ -1,9 +1,9 @@
 ﻿using Application.DataTransferObjects;
 using Application.Validators;
+using Domain.CoreServices;
 using Domain.Entities;
 using Domain.IRepositories;
 using Domain.Mediator;
-using Domain.Services.Validation;
 
 namespace Application.Cities.Queries;
 public class GetCitiesList

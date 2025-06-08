@@ -6,8 +6,12 @@ using Domain.IRepositories;
 using Domain.Mediator;
 using Domain.Services.Exceptions;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Persistence;
+using Persistence.IdentityEnitities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,9 +23,27 @@ builder.Services.AddControllers();
 //builder.Services.AddOpenApi();
 
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AppDBContext>(opt =>
+builder.Services.AddDbContext<IdentityDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+builder.Services.AddIdentityApiEndpoints<AppUser>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<IdentityDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<EditActivityValidator>();
@@ -42,7 +64,7 @@ builder.Services.AddTransient<ExceptionMiddleware>();
 
 
 builder.Services.Scan(scan => scan
-    .FromAssemblyOf<ActivityRepository>() // or typeof(AnyRepositoryInTargetAssembly)
+    .FromAssemblyOf<ActivityRepository>() 
     .AddClasses(classes => classes.AssignableTo(typeof(IRepositoty<>)))
     .AsImplementedInterfaces()
     .WithScopedLifetime());
@@ -56,6 +78,10 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
+
+builder.Services.AddAuthorization();
+
+
 
 var app = builder.Build();
 
@@ -75,8 +101,11 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGroup("api").MapIdentityApi<AppUser>();
 
 app.Run();

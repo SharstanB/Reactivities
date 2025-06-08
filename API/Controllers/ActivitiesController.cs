@@ -1,7 +1,7 @@
 ﻿using Application.Activities.Command;
 using Application.Activities.Queries;
 using Application.DataTransferObjects.Activity;
-using Domain.Services.Validation;
+using Domain.CoreServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;

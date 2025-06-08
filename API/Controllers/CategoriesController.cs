@@ -1,6 +1,6 @@
 ﻿using Application.Categories.Queries;
 using Application.DataTransferObjects;
-using Domain.Services.Validation;
+using Domain.CoreServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

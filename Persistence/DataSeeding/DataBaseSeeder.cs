@@ -1,6 +1,8 @@
 ﻿using Domain.Entities;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Persistence;
 
 namespace API
