@@ -1,8 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation,useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
+import {Activity, ApiResponse} from '../../lib/types/index'
+import { useNavigate } from "react-router";
 
 export const useActivities = (id? : string ) => {
-    const queryClient = useQueryClient();
+  const navigate = useNavigate();
+      const queryClient = useQueryClient();
     const {data: activityResult , isPending} =  useQuery({
         queryKey: ['activities'],
           queryFn: async () => {
@@ -20,9 +23,14 @@ export const useActivities = (id? : string ) => {
         enabled: !!id,
         staleTime: 1000 * 60 * 5
       });
+     
       const createActivity = useMutation({
         mutationFn: async (activity : Activity) =>{
-          await agent.post('/Activities' , activity);
+          await agent.post('/Activities' , activity).then(res => 
+            {
+              if(res?.data)
+                navigate(`/activities/${res?.data.data}`)
+            } );
         },
         onSuccess: async () =>{
           await queryClient.invalidateQueries({

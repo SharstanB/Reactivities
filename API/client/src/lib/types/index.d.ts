@@ -10,13 +10,13 @@ type Activity = {
     date: Date
     title: string
     isCancelled: boolean
-    cityName: string
+    city: string
     venue: string
     latitude: number
     longitude: number
     categoryName: string
     categoryId: string
-    cityId: string
+    // cityId: string
 };
 
 type BasicListObject = {
@@ -24,7 +24,7 @@ type BasicListObject = {
     name : string
 }
 
-type LocationIQ = {
+export type LocationIQ = {
   place_id: string
   osm_id: string
   osm_type: string
@@ -40,11 +40,13 @@ type LocationIQ = {
   address: Address
 }
 
-type AddressIQ = {
+export type AddressIQ = {
   name: string
   road?: string
   suburb?: string
-  city: string
+  town?: string
+  village?: string
+  city?: string
   county: string
   state: string
   postcode: string

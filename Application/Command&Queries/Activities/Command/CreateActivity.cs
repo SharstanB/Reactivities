@@ -35,7 +35,7 @@ namespace Application.Activities.Command
 
                 var Activity = new Activity()
                 {
-                    CityId = request.Activity.CityId,
+                    City = request.Activity.City,
                     Venue = request.Activity.Venue,
                     Latitude = request.Activity.Latitude,
                     Longitude = request.Activity.Longitude,

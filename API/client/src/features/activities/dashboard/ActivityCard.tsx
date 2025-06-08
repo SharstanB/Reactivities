@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router";
 import { AccessTime, LocationOn } from "@mui/icons-material";
 import { FormatDate } from "../../../lib/util/util";
-
+import { Activity } from "../../../lib/types";
 type Props = {
   activity: Activity;
 };
@@ -33,7 +33,7 @@ export default function ActivityCard({activity}: Props) {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '15px' }}>
           <LocationOn style={{ marginRight: '5px' }} />
-          <Typography variant="body2">{activity.cityName}</Typography>
+          <Typography variant="body2">{activity.city}</Typography>
         </div>
         </Box>
        

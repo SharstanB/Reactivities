@@ -15,8 +15,7 @@ namespace Application.DataTransferObjects.Activity
 
         public required string Title { get; set; }
 
-        public required string CityName { get; set; }
-        public required string CityId{ get; set; }
+        public required string City{ get; set; }
 
         public required string Venue { get; set; }
 

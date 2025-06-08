@@ -18,7 +18,7 @@ namespace Application.Validators.Activities
                     .MaximumLength(100).WithMessage("Title most not be less thab 100 characters");
             RuleFor( x =>  Selector(x).Date).GreaterThan(DateTime.UtcNow).WithMessage("Date most be in the fulture")
                     .NotEmpty().WithMessage("Date most not be empty");
-            RuleFor(x => Selector(x).CityId).NotEmpty().WithMessage("CityId most not be empty");
+            RuleFor(x => Selector(x).City).NotEmpty().WithMessage("CityId most not be empty");
             RuleFor(x => Selector(x).CategoryId).NotEmpty().WithMessage("CategoryId most not be empty");
             RuleFor(x => Selector(x).Description).NotEmpty().WithMessage("Description most not be empty");
             RuleFor(x => Selector(x).Venue).NotEmpty().WithMessage("Venue most not be empty");

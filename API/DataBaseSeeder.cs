@@ -62,8 +62,7 @@ namespace API
                     Description = "Activity 2 months ago",
                     Category = categories[Random.Shared.Next(catergoriesCount)],
                     CategoryId = categories[Random.Shared.Next(catergoriesCount)].Id,
-                    City = cities[Random.Shared.Next(citiesCount)],
-                    CityId = cities[Random.Shared.Next(citiesCount)].Id,
+                    City ="London",
                     Venue = "Pub",
                 }, new Activity()
                 {
@@ -72,8 +71,7 @@ namespace API
                     Description = "Activity 1 month ago",
                     Category =categories[Random.Shared.Next(catergoriesCount)] ,
                     CategoryId = categories[Random.Shared.Next(catergoriesCount)].Id,
-                    City =  cities[Random.Shared.Next(citiesCount)],
-                    CityId = cities[Random.Shared.Next(citiesCount)].Id,
+                    City =  "Paris",
                     Venue = "Cinema",
                 }, new Activity()
                 {
@@ -82,9 +80,7 @@ namespace API
                     Description = "Activity 1 month in future",
                     Category =categories[Random.Shared.Next(catergoriesCount)] ,
                     CategoryId = categories[Random.Shared.Next(catergoriesCount)].Id,
-                    City =  cities[Random.Shared.Next(citiesCount)],
-                    CityId = cities[Random.Shared.Next(citiesCount)].Id,
-                    Venue = "Zoo",
+                    City =  "Aleppo",
                 }, new Activity()
                 {
                     Title = "Future Activity 2",
@@ -92,8 +88,7 @@ namespace API
                     Description = "Activity 2 months in future",
                     Category =categories[Random.Shared.Next(catergoriesCount)] ,
                     CategoryId = categories[Random.Shared.Next(catergoriesCount)].Id,
-                    City =  cities[Random.Shared.Next(citiesCount)],
-                    CityId = cities[Random.Shared.Next(citiesCount)].Id,
+                    City =  "Hama",
                     Venue = "Park",
                 }, new Activity()
                 {
@@ -102,8 +97,7 @@ namespace API
                     Description = "Activity 3 months in future",
                     Category =categories[Random.Shared.Next(catergoriesCount)] ,
                     CategoryId = categories[Random.Shared.Next(catergoriesCount)].Id,
-                    City =  cities[Random.Shared.Next(citiesCount)],
-                    CityId = cities[Random.Shared.Next(citiesCount)].Id,
+                    City =   "Homs",
                     Venue = "Pub",
                 }, new Activity()
                 {
@@ -112,8 +106,7 @@ namespace API
                     Description = "Activity 4 months in future",
                     Category =categories[Random.Shared.Next(catergoriesCount)] ,
                     CategoryId = categories[Random.Shared.Next(catergoriesCount)].Id,
-                    City = cities[Random.Shared.Next(citiesCount)],
-                    CityId = cities[Random.Shared.Next(citiesCount)].Id,
+                    City =  "Istanbul",
                     Venue = "Pub",
                 }, new Activity()
                 {
@@ -122,8 +115,7 @@ namespace API
                     Description = "Activity 5 months in future",
                     Category = categories[Random.Shared.Next(catergoriesCount)],
                     CategoryId = categories[Random.Shared.Next(catergoriesCount)].Id,
-                    City = cities[Random.Shared.Next(citiesCount)],
-                    CityId = cities[Random.Shared.Next(citiesCount)].Id,
+                    City =  "Erbil",
                     Venue = "Pub",
                 }
             };

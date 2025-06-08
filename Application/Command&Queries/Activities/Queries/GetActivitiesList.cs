@@ -25,8 +25,7 @@ namespace Application.Activities.Queries
                 {
                     Data = activities.Data.Select(activity => new GetActivitiesDTO()
                     {
-                        CityId = activity.CityId.ToString(),
-                        CityName = activity.City.CityName,
+                        City = activity.City,
                         CategoryName = activity.Category.Name,
                         CategoryId = activity.CategoryId.ToString(),
                         Date = activity.Date,

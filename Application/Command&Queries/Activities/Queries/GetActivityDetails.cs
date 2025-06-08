@@ -23,8 +23,7 @@ namespace Application.Activities.Queries
                 {
                     Data = new GetActivitiesDTO()
                     {
-                        CityId = data.CityId.ToString(),
-                        CityName = data.City.CityName,
+                        City = data.City,
                         CategoryName = data.Category.Name,
                         Date = data.Date,
                         Description = data.Description,

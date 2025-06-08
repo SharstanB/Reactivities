@@ -18,7 +18,7 @@ namespace Application.Activities.Command
             {
                 var Activity = new Activity()
                 {
-                    CityId = command.Activity.CityId,
+                    City = command.Activity.City,
                     Venue = command.Activity.Venue,
                     Latitude = command.Activity.Latitude,
                     Longitude = command.Activity.Longitude,

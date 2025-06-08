@@ -16,6 +16,9 @@ public class Activity : BaseEntity
     [Required]
     public  string Venue {get; set;} = string.Empty;
 
+    [Required]
+    public string City { get; set; }
+
     public double Latitude {get; set;}
 
     public double Longitude { get; set;}
@@ -24,9 +27,4 @@ public class Activity : BaseEntity
 
     [Required]
     public  required Guid CategoryId { get; set; }
-
-    public City City { get; set; }
-
-    [Required]
-    public  required Guid CityId { get; set; }
 }

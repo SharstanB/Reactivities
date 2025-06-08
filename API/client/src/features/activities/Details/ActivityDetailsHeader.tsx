@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import {Link} from 'react-router'
 import { FormatDate } from "../../../lib/util/util";
+import { Activity } from "../../../lib/types";
 type Props = {
     activity : Activity,
    } 
