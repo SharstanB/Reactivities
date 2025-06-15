@@ -1,9 +1,12 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
+using Persistence.IdentityEnitities;
 
 namespace API
 {
@@ -24,8 +27,9 @@ namespace API
             try
             {
                 var context = services.GetRequiredService<AppDBContext>();
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
                 await context.Database.MigrateAsync();
-                await SeedActivity(context);
+                await StartSeeding(context, userManager);
 
             }
             catch (Exception ex)
@@ -36,9 +40,21 @@ namespace API
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-        public static async Task SeedActivity(AppDBContext context)
+        public static async Task StartSeeding(AppDBContext context, UserManager<AppUser> userManager)
         {
-
+            if (!userManager.Users.Any())
+            {
+                var users = new List<AppUser>
+            {
+                new() {Email = "jack@gmail.com", UserName="jk@gmail.com", Name = "Jack B." },
+                new() {Email = "sam@gmail.com", UserName="sm@gmail.com", Name = "Sam Altman"},
+                new() {Email = "jane@gmail.com", UserName="jn@gmail.com", Name= "Jane John"}
+            };
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd ");
+                }
+            }
             if (!context.Categories.Any())
             {
                 await SeedCategory(context);

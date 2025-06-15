@@ -7,5 +7,10 @@ namespace Persistence.IdentityEnitities
     {
         [Required]
         public Guid Id { get; set; }
+
+        [PersonalData]
+        public string? Name { get; set; }
+        [PersonalData]
+        public DateTime DOB { get; set; }
     }
 }

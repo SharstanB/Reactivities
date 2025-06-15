@@ -9,7 +9,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Persistence;
 using Persistence.IdentityEnitities;
 
@@ -23,7 +22,7 @@ builder.Services.AddControllers();
 //builder.Services.AddOpenApi();
 
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<IdentityDbContext>(opt =>
+builder.Services.AddDbContext<AppDBContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
@@ -32,7 +31,7 @@ builder.Services.AddIdentityApiEndpoints<AppUser>(options =>
     options.User.RequireUniqueEmail = true;
 })
 .AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<IdentityDbContext>();
+.AddEntityFrameworkStores<AppDBContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -80,8 +79,6 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAuthorization();
-
-
 
 var app = builder.Build();
 
