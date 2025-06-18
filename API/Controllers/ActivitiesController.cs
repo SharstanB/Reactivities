@@ -2,6 +2,7 @@
 using Application.Activities.Queries;
 using Application.DataTransferObjects.Activity;
 using Domain.CoreServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -11,7 +12,7 @@ namespace API.Controllers;
 
 public class ActivitiesController : BaseAppController
 {
-
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<OperationResult<List<GetActivitiesDTO>>>> GetActivities()
     {

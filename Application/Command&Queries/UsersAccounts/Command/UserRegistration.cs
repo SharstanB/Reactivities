@@ -1,21 +1,21 @@
-﻿using Domain.IRepositories;
-using Domain.Entities;
-using Domain.Mediator;
-using Application.DataTransferObjects.Activity;
-using FluentValidation;
-using Domain.Enums;
+﻿using Application.DataTransferObjects.UsersAccounts;
 using Domain.CoreServices;
-namespace Application.Activities.Command
+using Domain.Enums;
+using Domain.IRepositories;
+using Domain.Mediator;
+using FluentValidation;
+
+namespace Application.Command_Queries.UsersAccounts.Command
 {
-    public class CreateActivity
+    public class UserRegistration
     {
         public class Command : IRequest<OperationResult<Guid>>
         {
-           public required  CreateActivityDTO Activity { get; set; }
+            public required UserRegistrationDTO UserRegistration { get; set; }
 
         }
 
-        public class Handler(IRepositoty<Activity> activityRepositoty,IValidator<Command> validator)
+        public class Handler(IRepositoty<Activity> activityRepositoty, IValidator<Command> validator)
             : IRequestHandler<Command, OperationResult<Guid>>
         {
             public async Task<OperationResult<Guid>> Handle(Command request, CancellationToken cancellationToken = default)
@@ -48,7 +48,7 @@ namespace Application.Activities.Command
 
                 return result;
             }
-             
+
         }
     }
 }
